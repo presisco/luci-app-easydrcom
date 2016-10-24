@@ -1,0 +1,19 @@
+
+config easydrcom
+	option enable '0'
+	option boot '0'
+	option username '0'
+	option password '0'
+	option mode '2'
+	option autoonline '1'
+	option autoredial '1'
+	option ip '172.25.8.4'
+	option port '61440'
+	option usebroadcast '1'
+	option mac '00:1a:a9:c3:3a:59'
+	option nic 'eth0'
+	option eaptimeout '1000'
+	option udptimeout '2000'
+	option hostname 'easydrcom'
+	option kernelversion '0.9'
+	
