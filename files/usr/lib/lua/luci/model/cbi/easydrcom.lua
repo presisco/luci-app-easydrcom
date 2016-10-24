@@ -14,10 +14,6 @@ s.anonymous = true
 enable = s:option(Flag, "enable", translate("Enable"))
 enable.rmempty = false
 
-
-boot = s:option(Flag, "boot", translate("Start at boot"))
-boot.rmempty = true
-
 autoonline=s:option(Flag, "autoonline", translate("Auto Online"))
 autoonline.rmempty = true
 autoredial=s:option(Flag, "autoredial", translate("Auto Redial"))
@@ -69,7 +65,7 @@ end
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
-	os.execute("/etc/init.d/easydrcom restart >/dev/null 2>&1 &")
+	luci.sys.call("/etc/init.d/easydrcom-conf reload >/dev/null")
 end
 
 return m

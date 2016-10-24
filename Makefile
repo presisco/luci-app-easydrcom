@@ -14,7 +14,9 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 include $(INCLUDE_DIR)/package.mk
 
 define Package/luci-app-easydrcom
-  CATEGORY:=Network
+  SECTION:=luci
+  CATEGORY:=LuCI
+  SUBMENU:=3. Applications
   TITLE:=LuCI Configure interface for EasyDrcom
   MAINTAINER:=presisco <internight@sina.com>
   DEPENDS:=+easydrcom +luci
@@ -34,8 +36,10 @@ endef
 Build/Compile = $(Build/Compile/Default)
 
 define Package/luci-app-easydrcom/install
+	$(RM) $(1)/etc/config/easydrcom.conf
+	$(RM) $(1)/etc/init.d/easydrcom
 	$(CP) -a files/* $(1)/
-	chmod 755 $(1)/etc/init.d/easydrcom
+	chmod 755 $(1)/etc/init.d/easydrcom-conf
 endef
 
 $(eval $(call BuildPackage,luci-app-easydrcom))
