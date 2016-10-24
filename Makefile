@@ -35,7 +35,7 @@ Build/Compile = $(Build/Compile/Default)
 
 define Package/luci-app-easydrcom/install
 	$(CP) -a files/* $(1)/
-	chmod 755 $(1)/etc/init.d/easydrcom-test
+	chmod 755 $(1)/etc/init.d/easydrcom
 endef
 
 $(eval $(call BuildPackage,luci-app-easydrcom))
