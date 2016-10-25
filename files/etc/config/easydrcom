@@ -15,4 +15,7 @@ config easydrcom
 	option autoonline '1'
 	option autoredial '1'
 	option usebroadcast '1'
+	option more '0'
+	option usecustomif '0'
+	option customif 'eth0.2'
 

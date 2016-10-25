@@ -19,7 +19,14 @@ reload()
 	echo UseBroadcast=$(uci get easydrcom.@easydrcom[0].usebroadcast) >> /etc/config/easydrcom.conf
 	echo MAC=$(uci get easydrcom.@easydrcom[0].mac) >> /etc/config/easydrcom.conf
 	echo [Local] >> /etc/config/easydrcom.conf
-	echo NIC=$(uci get easydrcom.@easydrcom[0].nic) >> /etc/config/easydrcom.conf
+	
+	if [ $(uci get easydrcom.@easydrcom[0].usecustomif) ]
+	then
+		echo NIC=$(uci get easydrcom.@easydrcom[0].customif) >> /etc/config/easydrcom.conf
+	else
+		echo NIC=$(uci get easydrcom.@easydrcom[0].nic) >> /etc/config/easydrcom.conf
+	fi
+	
 	echo EAPTimeout=$(uci get easydrcom.@easydrcom[0].eaptimeout) >> /etc/config/easydrcom.conf
 	echo UDPTimeout=$(uci get easydrcom.@easydrcom[0].udptimeout) >> /etc/config/easydrcom.conf
 	echo HostName=$(uci get easydrcom.@easydrcom[0].hostname) >> /etc/config/easydrcom.conf
