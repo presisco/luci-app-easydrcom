@@ -25,6 +25,14 @@ mode:value("2",translate("2(dormitory area2)"))
 mode.default = "2"
 
 local wanif = luci.util.exec("uci get network.wan.ifname")
+if (wanif == "uci: Entry not found")
+then
+	wanif = luci.util.exec("uci get network.WAN.ifname")
+end
+if (wanif == "uci: Entry not found")
+then
+	wanif = "please use custom interface"
+end
 s:option(Value, "nic", translate("Auto detected wan inteface:"))
 s.default=wanif;
 
@@ -80,7 +88,7 @@ kernelversion:depends("more", "1")
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
-	luci.sys.call("/etc/init.d/easydrcom-conf reload >/dev/null")
+	luci.util.exec("/etc/init.d/easydrcom-conf reload >/dev/null 2>&1 &")
 end
 
 return m

@@ -20,7 +20,7 @@ reload()
 	echo MAC=$(uci get easydrcom.@easydrcom[0].mac) >> /etc/config/easydrcom.conf
 	echo [Local] >> /etc/config/easydrcom.conf
 	
-	if [ $(uci get easydrcom.@easydrcom[0].usecustomif) ]
+	if [ $(uci get easydrcom.@easydrcom[0].usecustomif) -eq 1 ]
 	then
 		echo NIC=$(uci get easydrcom.@easydrcom[0].customif) >> /etc/config/easydrcom.conf
 	else
@@ -32,12 +32,12 @@ reload()
 	echo HostName=$(uci get easydrcom.@easydrcom[0].hostname) >> /etc/config/easydrcom.conf
 	echo KernelVersion=$(uci get easydrcom.@easydrcom[0].kernelversion) >> /etc/config/easydrcom.conf
 
-	if [ $(uci get easydrcom.@easydrcom[0].enable) ] ;
+	if [ $(uci get easydrcom.@easydrcom[0].enable) -eq 1 ] ;
 	then
 		/etc/init.d/easydrcom enable
 		/etc/init.d/easydrcom start
 	else
 		/etc/init.d/easydrcom stop
-		/etc/init.d/easydrcom disable	
+		/etc/init.d/easydrcom disable
 	fi
 }
