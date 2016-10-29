@@ -31,13 +31,14 @@ reload()
 	echo UDPTimeout=$(uci get easydrcom.@easydrcom[0].udptimeout) >> /etc/config/easydrcom.conf
 	echo HostName=$(uci get easydrcom.@easydrcom[0].hostname) >> /etc/config/easydrcom.conf
 	echo KernelVersion=$(uci get easydrcom.@easydrcom[0].kernelversion) >> /etc/config/easydrcom.conf
-
+	
+	/etc/init.d/easydrcom stop
+	
 	if [ $(uci get easydrcom.@easydrcom[0].enable) -eq 1 ] ;
 	then
 		/etc/init.d/easydrcom enable
 		/etc/init.d/easydrcom start
 	else
-		/etc/init.d/easydrcom stop
 		/etc/init.d/easydrcom disable
 	fi
 }

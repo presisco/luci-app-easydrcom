@@ -8,20 +8,23 @@ m = Map("easydrcom", translate("EasyDrcom"), translate("Configure EasyDrcom clie
 
 local a=require"luci.model.network"
 s = m:section(TypedSection, "easydrcom", translate("Settings"))
-s.addremove = false
 s.anonymous = true
 
-enable = s:option(Flag, "enable", translate("Enable"))
+s:tab("basic",  translate("Basic Settings"))
+s:tab("advanced", translate("Advanced Settings"))
+s:tab("realtime", translate("Realtime"))
+
+enable = s:taboption("basic",Flag, "enable", translate("Enable"))
 enable.rmempty = false
 
-s:option(Value, "username", translate("username"))
-pass = s:option(Value, "password", translate("password"))
+s:taboption("basic",Value, "username", translate("username"))
+pass = s:taboption("basic",Value, "password", translate("password"))
 pass.password = true
 
-mode = s:option(ListValue, "mode", translate("Mode"))
-mode:value("0",translate("0(dormitory area1)"))
-mode:value("1",translate("1(office area)"))
-mode:value("2",translate("2(dormitory area2)"))
+mode = s:taboption("basic",ListValue, "mode", translate("Mode"))
+mode:value("0",translate("0:802.1x+UDP"))
+mode:value("1",translate("1:UDP only"))
+mode:value("2",translate("2:802.1x+UDP(Recommended)"))
 mode.default = "2"
 
 local wanif = luci.util.exec("uci get network.wan.ifname")
@@ -33,17 +36,13 @@ if (wanif == "uci: Entry not found")
 then
 	wanif = "please use custom interface"
 end
-s:option(Value, "nic", translate("Auto detected wan inteface:"))
+s:taboption("basic",Value, "nic", translate("Auto detected wan inteface:"))
 s.default=wanif;
 
-more=s:option(Flag, "more", translate("More Options"),translate("Options for advanced users"))
-more.rmempty=false;
-
-usecustomif=s:option(Flag, "usecustomif", translate("Use custom wan interface"),translate("if default has problems"))
+usecustomif=s:taboption("advanced",Flag, "usecustomif", translate("Use custom wan interface"),translate("if default has problems"))
 usecustomif.rmempty=false;
-usecustomif:depends("more", "1")
 
-ifnames = s:option(ListValue, "customif", translate("Extra Interfaces"))
+ifnames = s:taboption("advanced",ListValue, "customif", translate("Extra Interfaces"))
 local netinfo=luci.util.execi("uci show network | grep \"\\.ifname='*'\"")
 for raw in netinfo do
 	i,j=string.find(raw,"'+.+'")
@@ -52,39 +51,44 @@ end
 
 ifnames:depends("usecustomif", "1")
 
-ip=s:option(Value, "ip", translate("authentication's IP"))
+--logpath=s:taboption("advanced",Value,"logpath",translate("Path for log file"));
+--logpath.default="/tmp/easydrcom.log"
+
+ip=s:taboption("advanced",Value, "ip", translate("authentication's IP"))
 ip.default="172.25.8.4"
-ip:depends("more", "1")
-port=s:option(Value, "port", translate("authentication's port"))
+port=s:taboption("advanced",Value, "port", translate("authentication's port"))
 port.default="61440"
-port:depends("more", "1")
 
-usebroadcast=s:option(Flag, "usebroadcast", translate("MAC BROADCAST"))
+usebroadcast=s:taboption("advanced",Flag, "usebroadcast", translate("MAC BROADCAST"))
 usebroadcast.rmempty = true
-usebroadcast:depends("more", "1")
-autoonline=s:option(Flag, "autoonline", translate("Auto Online"))
+autoonline=s:taboption("advanced",Flag, "autoonline", translate("Auto Online"))
 autoonline.rmempty = true
-autoonline:depends("more", "1")
-autoredial=s:option(Flag, "autoredial", translate("Auto Redial"))
+autoredial=s:taboption("advanced",Flag, "autoredial", translate("Auto Redial"))
 autoredial.rmempty = true
-autoredial:depends("more", "1")
 
-mac=s:option(Value, "mac", translate("authentication's MAC address"))
+mac=s:taboption("advanced",Value, "mac", translate("authentication's MAC address"))
 mac.default="00:1a:a9:c3:3a:59"
-mac:depends("more", "1")
 
-eaptimeout=s:option(Value, "eaptimeout", translate("Packet timeout (ms)"))
+eaptimeout=s:taboption("advanced",Value, "eaptimeout", translate("Packet timeout (ms)"))
 eaptimeout.default="1000"
-eaptimeout:depends("more", "1")
-udptimeout=s:option(Value, "udptimeout", translate("UDP Packet timeout (ms)"))
+udptimeout=s:taboption("advanced",Value, "udptimeout", translate("UDP Packet timeout (ms)"))
 udptimeout.default="2000"
-udptimeout:depends("more", "1")
-hostname=s:option(Value, "hostname", "HostName")
+hostname=s:taboption("advanced",Value, "hostname", "HostName")
 hostname.default="EasyDrcom"
-hostname:depends("more", "1")
-kernelversion=s:option(Value, "kernelversion" ,"KernelVersion")
+kernelversion=s:taboption("advanced",Value, "kernelversion" ,"KernelVersion")
 kernelversion.default="0.9"
-kernelversion:depends("more", "1")
+
+logtext = s:taboption("realtime", Value, "logtext",
+	translate("newest log of EasyDrcom"), 
+	translate("see for yourself"))
+		
+logtext.template = "cbi/tvalue"
+logtext.rows = 20
+
+function logtext.cfgvalue(self, section)
+--	path=luci.util.exec("uci get easydrcom.@easydrcom[0].logpath")
+	return nixio.fs.readfile("/tmp/EasyDrcom.log")
+end
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
