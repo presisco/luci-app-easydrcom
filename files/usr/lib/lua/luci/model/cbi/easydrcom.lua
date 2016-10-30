@@ -78,16 +78,14 @@ hostname.default="EasyDrcom"
 kernelversion=s:taboption("advanced",Value, "kernelversion" ,"KernelVersion")
 kernelversion.default="0.9"
 
-logtext = s:taboption("realtime", Value, "logtext",
-	translate("newest log of EasyDrcom"), 
-	translate("see for yourself"))
+logtext = s:taboption("realtime", TextValue, "logtext",
 		
-logtext.template = "cbi/tvalue"
-logtext.rows = 20
+--logtext.template = "cbi/tvalue"
+--logtext.rows = 20
 
 function logtext.cfgvalue(self, section)
 --	path=luci.util.exec("uci get easydrcom.@easydrcom[0].logpath")
-	return nixio.fs.readfile("/tmp/EasyDrcom.log")
+	return luci.util.exec("tail -n 40 /tmp/EasyDrcom.log")
 end
 
 local apply = luci.http.formvalue("cbi.apply")
