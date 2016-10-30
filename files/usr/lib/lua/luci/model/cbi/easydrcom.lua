@@ -51,8 +51,8 @@ end
 
 ifnames:depends("usecustomif", "1")
 
---logpath=s:taboption("advanced",Value,"logpath",translate("Path for log file"));
---logpath.default="/tmp/easydrcom.log"
+logpath=s:taboption("advanced",Value,"logpath",translate("Path for log file"));
+logpath.default="/tmp/easydrcom.log"
 
 ip=s:taboption("advanced",Value, "ip", translate("authentication's IP"))
 ip.default="172.25.8.4"
@@ -85,8 +85,8 @@ logtext = s:taboption("realtime", TextValue, "logtext",
 --logtext.rows = 20
 
 function logtext.cfgvalue(self, section)
---	path=luci.util.exec("uci get easydrcom.@easydrcom[0].logpath")
-	return luci.util.exec("tail -n 40 /tmp/EasyDrcom.log")
+	path=luci.util.exec("uci get easydrcom.@easydrcom[0].logpath")
+	return luci.util.exec("tail -n 40 "..path)
 end
 
 local apply = luci.http.formvalue("cbi.apply")
