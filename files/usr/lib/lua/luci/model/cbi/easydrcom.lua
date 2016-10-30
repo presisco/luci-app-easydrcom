@@ -79,6 +79,7 @@ kernelversion=s:taboption("advanced",Value, "kernelversion" ,"KernelVersion")
 kernelversion.default="0.9"
 
 logtext = s:taboption("realtime", TextValue, "logtext",
+	translate("last 40 lines of EasyDrcom logs"))
 		
 --logtext.template = "cbi/tvalue"
 --logtext.rows = 20
