@@ -19,4 +19,5 @@ config easydrcom
 	option enable '1'
 	option usecustomif '0'
 	option logpath '/tmp/easydrcom.conf'
+	option usedelay '0'
 

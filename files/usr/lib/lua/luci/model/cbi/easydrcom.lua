@@ -28,18 +28,18 @@ mode:value("2",translate("2:802.1x+UDP(Recommended)"))
 mode.default = "2"
 
 local wanif = luci.util.exec("uci get network.wan.ifname")
-if (wanif == "uci: Entry not found")
+if (wanif == "")
 then
 	wanif = luci.util.exec("uci get network.WAN.ifname")
 end
-if (wanif == "uci: Entry not found")
+if (wanif == "")
 then
 	wanif = "please use custom interface"
 end
 s:taboption("basic",Value, "nic", translate("Auto detected wan inteface:"))
-s.default=wanif;
+s.default=wanif
 
-usecustomif=s:taboption("advanced",Flag, "usecustomif", translate("Use custom wan interface"),translate("if default has problems"))
+usecustomif=s:taboption("advanced",Flag, "usecustomif", translate("Use custom wan interface"))
 usecustomif.rmempty=false;
 
 ifnames = s:taboption("advanced",ListValue, "customif", translate("Extra Interfaces"))
@@ -50,6 +50,13 @@ for raw in netinfo do
 end
 
 ifnames:depends("usecustomif", "1")
+
+usedelay=s:taboption("advanced",Flag, "usedelay", translate("Delay EasyDrcom if cant find interface"))
+usedelay.rmempty=false;
+
+delay=s:taboption("advanced",Value,"startupdelay",translate("Delays in seconds"));
+delay.default=0
+delay:depends("usedelay","1")
 
 logpath=s:taboption("advanced",Value,"logpath",translate("Path for log file"));
 logpath.default="/tmp/easydrcom.log"

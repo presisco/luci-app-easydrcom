@@ -2,7 +2,7 @@
 #Author:corecode
 #Modifier:superlc,presisco
 
-START=96
+START=99
 STOP=10
 
 reload()
@@ -45,6 +45,10 @@ reload()
 }
 
 start(){
+	if [ $(uci get easydrcom.@easydrcom[0].usedelay) -eq 1 ]
+	then
+		sleep $(uci get easydrcom.@easydrcom[0].startupdelay)
+	fi
 	easydrcom -b -r -c /etc/config/easydrcom.conf -o $(uci get easydrcom.@easydrcom[0].logpath) &
 }
 
