@@ -32,8 +32,8 @@ reload()
 	echo HostName=$(uci get easydrcom.@easydrcom[0].hostname) >> /etc/config/easydrcom.conf
 	echo KernelVersion=$(uci get easydrcom.@easydrcom[0].kernelversion) >> /etc/config/easydrcom.conf
 	
+	/etc/init.d/easydrcom stop
 	/etc/init.d/easydrcom disable
-	/etc/init.d/easydrcom-conf stop
 	
 	if [ $(uci get easydrcom.@easydrcom[0].enable) -eq 1 ] ;
 	then
@@ -49,14 +49,25 @@ start(){
 	then
 		sleep $(uci get easydrcom.@easydrcom[0].startupdelay)
 	fi
+	easydrcom_start
+	daemon_start
+}
+
+easydrcom_start(){
 	easydrcom -b -r -c /etc/config/easydrcom.conf -o $(uci get easydrcom.@easydrcom[0].logpath) &
 }
 
+daemon_start(){
+	./usr/bin/easydrcom-daemon.sh &
+}
+
 stop(){
+	killall easydrcom-daemon
 	killall easydrcom
 }
 
 restart(){
 	stop
-	start
+	easydrcom_start
+	daemon_start
 }

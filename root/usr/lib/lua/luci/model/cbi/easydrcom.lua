@@ -17,8 +17,10 @@ s:tab("realtime", translate("Realtime"))
 enable = s:taboption("basic",Flag, "enable", translate("Enable"))
 enable.rmempty = false
 
-s:taboption("basic",Value, "username", translate("username"))
+username=s:taboption("basic",Value, "username", translate("username"))
+username.default="11111111"
 pass = s:taboption("basic",Value, "password", translate("password"))
+pass.default="00000000"
 pass.password = true
 
 mode = s:taboption("basic",ListValue, "mode", translate("Mode"))
