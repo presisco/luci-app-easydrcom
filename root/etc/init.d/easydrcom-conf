@@ -53,7 +53,7 @@ start(){
 		sleep $(uci get easydrcom.@easydrcom[0].startupdelay)
 	fi
 
-	easydrcom -b -r -c /etc/config/easydrcom.conf -o $(uci get easydrcom.@easydrcom[0].logpath) &
+	easydrcom -b -r -c /etc/config/easydrcom.conf -o $(uci get easydrcom.@easydrcom[0].ezlogpath) &
 	
 	if [ $(uci get easydrcom.@easydrcom[0].usedaemon) -eq 1 ] ;
 	then

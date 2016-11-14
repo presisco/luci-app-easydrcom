@@ -12,6 +12,7 @@ s.anonymous = true
 
 s:tab("basic",  translate("Basic Settings"))
 s:tab("advanced", translate("Advanced Settings"))
+s:tab("log",translate("Log Settings"))
 s:tab("realtime", translate("Realtime"))
 
 enable = s:taboption("basic",Flag, "enable", translate("Enable"))
@@ -60,12 +61,23 @@ delay=s:taboption("advanced",Value,"startupdelay",translate("Delays in seconds")
 delay.default=0
 delay:depends("usedelay","1")
 
-logpath=s:taboption("advanced",Value,"logpath",translate("Path for log file"));
-logpath.default="/tmp/easydrcom.log"
+ezlogpath=s:taboption("log",Value,"ezlogpath",translate("Path for log file"));
+ezlogpath.default="/tmp/easydrcom.log"
+ezloglines=s:taboption("log",Value,"ezloglines",translate("Max Size for EasyDrcom log(lines)"));
+ezloglines.default="1000"
+
+dlogpath=s:taboption("log",Value,"dlogpath",translate("Path for daemon log file"));
+dlogpath.default="/tmp/easydrcom-daemon.log"
+dloglines=s:taboption("log",Value,"dloglines",translate("Max Size for Daemon log(lines)"));
+dloglines.default="1000"
 
 usedaemon=s:taboption("advanced",Flag,"usedaemon",translate("Use EasyDrcom Daemon"));
 usedaemon.default=1
 usedaemon.rmempty=false;
+
+dinterval=s:taboption("advanced",Value,"dinterval",translate("EasyDrcom Daemon check interval"));
+dinterval.default=60
+dinterval:depends("usedaemon","1")
 
 ip=s:taboption("advanced",Value, "ip", translate("authentication's IP"))
 ip.default="172.25.8.4"
@@ -98,7 +110,7 @@ logtext = s:taboption("realtime", TextValue, "logtext",
 --logtext.rows = 20
 
 function logtext.cfgvalue(self, section)
-	path=luci.util.exec("uci get easydrcom.@easydrcom[0].logpath")
+	path=luci.util.exec("uci get easydrcom.@easydrcom[0].ezlogpath")
 	return luci.util.exec("tail -n 40 "..path)
 end
 
