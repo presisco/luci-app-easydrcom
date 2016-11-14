@@ -17,9 +17,9 @@ s:tab("realtime", translate("Realtime"))
 enable = s:taboption("basic",Flag, "enable", translate("Enable"))
 enable.rmempty = false
 
-username=s:taboption("basic",Value, "username", translate("username"))
+username=s:taboption("basic",Value, "uid", translate("username"))
 username.default="11111111"
-pass = s:taboption("basic",Value, "password", translate("password"))
+pass = s:taboption("basic",Value, "pwd", translate("password"))
 pass.default="00000000"
 pass.password = true
 
@@ -62,6 +62,10 @@ delay:depends("usedelay","1")
 
 logpath=s:taboption("advanced",Value,"logpath",translate("Path for log file"));
 logpath.default="/tmp/easydrcom.log"
+
+usedaemon=s:taboption("advanced",Flag,"usedaemon",translate("Use EasyDrcom Daemon"));
+usedaemon.default=1
+usedaemon.rmempty=false;
 
 ip=s:taboption("advanced",Value, "ip", translate("authentication's IP"))
 ip.default="172.25.8.4"

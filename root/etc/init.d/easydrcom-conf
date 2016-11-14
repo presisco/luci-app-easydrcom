@@ -7,9 +7,11 @@ STOP=10
 
 reload()
 {
+	sleep 1
+
 	echo [General] > /etc/config/easydrcom.conf
-	echo UserName=$(uci get easydrcom.@easydrcom[0].username) >> /etc/config/easydrcom.conf
-	echo PassWord=$(uci get easydrcom.@easydrcom[0].password) >> /etc/config/easydrcom.conf
+	echo UserName=$(uci get easydrcom.@easydrcom[0].uid) >> /etc/config/easydrcom.conf
+	echo PassWord=$(uci get easydrcom.@easydrcom[0].pwd) >> /etc/config/easydrcom.conf
 	echo Mode=$(uci get easydrcom.@easydrcom[0].mode) >> /etc/config/easydrcom.conf
 	echo AutoOnline=$(uci get easydrcom.@easydrcom[0].autoonline) >> /etc/config/easydrcom.conf
 	echo AutoRedial=$(uci get easydrcom.@easydrcom[0].autoredial) >> /etc/config/easydrcom.conf
@@ -38,8 +40,9 @@ reload()
 	if [ $(uci get easydrcom.@easydrcom[0].enable) -eq 1 ] ;
 	then
 		/etc/init.d/easydrcom-conf enable
-		/etc/init.d/easydrcom-conf start
+		/etc/init.d/easydrcom-conf restart
 	else
+		/etc/init.d/easydrcom-conf stop
 		/etc/init.d/easydrcom-conf disable
 	fi
 }
@@ -49,25 +52,22 @@ start(){
 	then
 		sleep $(uci get easydrcom.@easydrcom[0].startupdelay)
 	fi
-	easydrcom_start
-	daemon_start
-}
 
-easydrcom_start(){
 	easydrcom -b -r -c /etc/config/easydrcom.conf -o $(uci get easydrcom.@easydrcom[0].logpath) &
-}
-
-daemon_start(){
-	./usr/bin/easydrcom-daemon.sh &
+	
+	if [ $(uci get easydrcom.@easydrcom[0].usedaemon) -eq 1 ] ;
+	then
+		sh /usr/bin/easydrcom-daemon.sh &
+	fi
 }
 
 stop(){
-	killall easydrcom-daemon
+	PID=`ps | grep 'easydrcom-daemon.sh' | grep -v grep | awk '{print $1}'`
+	kill $PID
 	killall easydrcom
 }
 
 restart(){
 	stop
-	easydrcom_start
-	daemon_start
+	start
 }

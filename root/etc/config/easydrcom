@@ -15,9 +15,10 @@ config easydrcom
 	option more '0'
 	option enable '1'
 	option usecustomif '0'
-	option logpath '/tmp/easydrcom.conf'
+	option logpath '/tmp/easydrcom.log'
 	option usedelay '0'
-	option username '11111111'
-	option password '00000000'
+	option usedaemon '1'
+	option uid '11111111'
+	option pwd '00000000'
 	option logtext ''
 

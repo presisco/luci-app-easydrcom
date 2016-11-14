@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-easydrcom
-PKG_VERSION:=1.5
+PKG_VERSION:=1.6
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -36,10 +36,16 @@ endef
 Build/Compile = $(Build/Compile/Default)
 
 define Package/luci-app-easydrcom/install
-	$(RM) $(1)/etc/config/easydrcom.conf
 	$(RM) $(1)/etc/init.d/easydrcom
-	$(CP) -a files/* $(1)/
-	chmod 755 $(1)/etc/init.d/easydrcom-conf
+	$(RM) $(1)/etc/config/easydrcom.conf
+	$(CP) -a root/* $(1)
+endef
+
+define Package/luci-app-easydrcom/postinst
+
+chmod 755 /usr/bin/easydrcom-daemon.sh
+chmod 755 /etc/init.d/easydrcom-conf
+	
 endef
 
 $(eval $(call BuildPackage,luci-app-easydrcom))
