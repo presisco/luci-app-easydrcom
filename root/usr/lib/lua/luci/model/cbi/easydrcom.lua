@@ -64,19 +64,19 @@ delay:depends("usedelay","1")
 ezlogpath=s:taboption("log",Value,"ezlogpath",translate("Path for log file"));
 ezlogpath.default="/tmp/easydrcom.log"
 ezlogsize=s:taboption("log",Value,"ezlogsize",translate("Max Size for EasyDrcom log(KB)"));
-ezlogsize.default="1024"
+ezlogsize.default="16"
 
 dlogpath=s:taboption("log",Value,"dlogpath",translate("Path for daemon log file"));
 dlogpath.default="/tmp/easydrcom-daemon.log"
 dlogsize=s:taboption("log",Value,"dlogsize",translate("Max Size for Daemon log(KB)"));
-dlogsize.default="1024"
+dlogsize.default="4"
 
 usedaemon=s:taboption("advanced",Flag,"usedaemon",translate("Use EasyDrcom Daemon"));
 usedaemon.default=1
 usedaemon.rmempty=false;
 
 dinterval=s:taboption("advanced",Value,"dinterval",translate("EasyDrcom Daemon check interval"));
-dinterval.default=60
+dinterval.default="60"
 dinterval:depends("usedaemon","1")
 
 ip=s:taboption("advanced",Value, "ip", translate("authentication's IP"))

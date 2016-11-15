@@ -41,7 +41,7 @@ else
 		
 		PCOUNT=`ps | grep -c "easydrcom -b -r"`
 		DATE=`date`
-		if [ $PCOUNT -lt "1" ]
+		if [ $PCOUNT -lt "2" ]
 		then
 			echo "easydrcom restarted at $DATE">>$DLOGPATH
 			/etc/init.d/easydrcom-conf start
