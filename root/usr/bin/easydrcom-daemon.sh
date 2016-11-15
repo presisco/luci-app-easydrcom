@@ -25,12 +25,16 @@ else
 	do
 		sleep $INTERVAL
 		
+		EZLOGSIZE=`awk 'END{print NR}' $EZLOGPATH`
+		if [ $EZLOGSIZE -gt $EZLOGMAXSIZE ]
 		then
 			echo "" > $EZLOGPATH
 			DATE=`date`
 			echo "cleared easydrcom logfile at $DATE">>$DLOGPATH
 		fi
 		
+		DLOGSIZE=`awk 'END{print NR}' $DLOGPATH`
+		if [ $DLOGSIZE -gt $DLOGMAXSIZE ]
 		then
 			echo "" > $DLOGPATH
 		fi
