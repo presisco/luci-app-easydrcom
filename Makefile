@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-easydrcom
-PKG_VERSION:=1.6
+PKG_VERSION:=1.7
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -43,8 +43,8 @@ endef
 
 define Package/luci-app-easydrcom/postinst
 
-chmod 755 /usr/bin/easydrcom-daemon.sh
-chmod 755 /etc/init.d/easydrcom-conf
+chmod 755 $(1)/usr/bin/easydrcom-daemon.sh
+chmod 755 $(1)/etc/init.d/easydrcom-conf
 	
 endef
 

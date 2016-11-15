@@ -5,9 +5,11 @@
 DAEMONCOUNT=`ps | grep -c easydrcom-daemon`
 DLOGPATH=$(uci get easydrcom.@easydrcom[0].dlogpath)
 EZLOGPATH=$(uci get easydrcom.@easydrcom[0].ezlogpath)
-DLOGMAXLINES=$(uci get easydrcom.@easydrcom[0].dloglines)
-EZLOGMAXLINES=$(uci get easydrcom.@easydrcom[0].ezloglines)
+DLOGMAXSIZE=$(uci get easydrcom.@easydrcom[0].dlogsize)
+EZLOGMAXSIZE=$(uci get easydrcom.@easydrcom[0].ezlogsize)
 INTERVAL=$(uci get easydrcom.@easydrcom[0].dinterval)
+let "DLOGMAXSIZE*=1024"
+let "EZLOGMAXSIZE*=1024"
 
 if [ $DAEMONCOUNT -ge "4" ]
 then
@@ -15,18 +17,20 @@ then
 else
 	DATE=`date`
 	echo "easydrcom daemon started at $DATE">>$DLOGPATH
+	echo "max easydrcom log size:$EZLOGMAXSIZE">>$DLOGPATH
+	echo "max daemon log size:$DLOGMAXSIZE">>$DLOGPATH
+	echo "check interval:$INTERVAL">>$DLOGPATH
+
 	while true
 	do
 		sleep $INTERVAL
 		
-		EZLOGLINES=`awk 'END{print NR}' test1.sh`
-		if [ $EZLOGLINES -gt $EZLOGMAXLINES ]
 		then
 			echo "" > $EZLOGPATH
+			DATE=`date`
+			echo "cleared easydrcom logfile at $DATE">>$DLOGPATH
 		fi
 		
-		DLOGLINES=`awk 'END{print NR}' test1.sh`
-		if [ $DLOGLINES -gt $DLOGMAXLINES ]
 		then
 			echo "" > $DLOGPATH
 		fi

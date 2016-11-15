@@ -63,13 +63,13 @@ delay:depends("usedelay","1")
 
 ezlogpath=s:taboption("log",Value,"ezlogpath",translate("Path for log file"));
 ezlogpath.default="/tmp/easydrcom.log"
-ezloglines=s:taboption("log",Value,"ezloglines",translate("Max Size for EasyDrcom log(lines)"));
-ezloglines.default="1000"
+ezlogsize=s:taboption("log",Value,"ezlogsize",translate("Max Size for EasyDrcom log(KB)"));
+ezlogsize.default="1024"
 
 dlogpath=s:taboption("log",Value,"dlogpath",translate("Path for daemon log file"));
 dlogpath.default="/tmp/easydrcom-daemon.log"
-dloglines=s:taboption("log",Value,"dloglines",translate("Max Size for Daemon log(lines)"));
-dloglines.default="1000"
+dlogsize=s:taboption("log",Value,"dlogsize",translate("Max Size for Daemon log(KB)"));
+dlogsize.default="1024"
 
 usedaemon=s:taboption("advanced",Flag,"usedaemon",translate("Use EasyDrcom Daemon"));
 usedaemon.default=1
